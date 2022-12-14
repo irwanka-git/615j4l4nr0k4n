@@ -40,7 +40,7 @@
 										</div>
                     <hr>
 										<p>
-											<center>Silahkan Login dengan Akun Anda!</center>
+											<center>Silahkan Login dengan User ID Anda!</center>
 										</p>
 
 										<form id="login" class="form-horizontal" method="post" 
@@ -62,7 +62,7 @@
 											</div>
 										</form>
                     <hr>
-                    &copy; 2022 - Rizki Kurnia
+                    &copy; 2022 - Rezki Kurnia Putra
 									</div>
 								</div>
 							</div>
