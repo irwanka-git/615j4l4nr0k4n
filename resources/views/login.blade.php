@@ -38,7 +38,7 @@
 												<b>Sistem Informasi Kerusakan Ruas Jalan di Kabupaten Rokan Hulu</b>
 											</p>
 										</div>
-                    <hr>
+                    					<hr>
 										<p>
 											<center>Silahkan Login dengan User ID Anda!</center>
 										</p>
@@ -62,7 +62,7 @@
 											</div>
 										</form>
                     <hr>
-                    &copy; 2022 - Rezki Kurnia Putra
+                    &copy; 2022 - Reski Kurnia Putra
 									</div>
 								</div>
 							</div>

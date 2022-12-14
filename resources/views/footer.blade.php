@@ -5,7 +5,7 @@
 		</div>
 		<div class="col-6 text-end">
 			<p class="mb-0">
-				&copy; 2022 - <a href="{{ url('/') }}" class="text-muted">Rezki Kurnia Putra</a>
+				&copy; 2022 - <a href="{{ url('/') }}" class="text-muted">Reski Kurnia Putra</a>
 			</p>
 		</div>
 	</div>
