@@ -152,6 +152,13 @@ Route::group(["middleware"=>['auth.login','auth.menu']], function(){
 		Route::post('submit-verifikasi', 'LaporanTitikKerusakanController@submit_verifikasi');
 		Route::post('submit-tolak', 'LaporanTitikKerusakanController@submit_tolak');
 	});
+
+	//rekap-kecamatan
+	Route::group(['prefix'=>'rekap-kecamatan'], function(){
+		Route::get('/', 'RekapKecamatanController@index');
+		Route::get('/dt', 'RekapKecamatanController@datatable');
+		Route::get('/map/{id_kecamatan}', 'RekapKecamatanController@peta_kecamatan');
+	});
 	
 });
 
