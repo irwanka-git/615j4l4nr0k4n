@@ -103,7 +103,57 @@ use App\Library\Access;
 @endsection
 
 @section("js")
+<style type="text/css">
+	 .custom-clustericon {
+        background: var(--cluster-color);
+        color: #fff;
+        border-radius: 100%;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+      }
+
+      .custom-clustericon::before,
+      .custom-clustericon::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+
+        transform: translate(-50%, -50%);
+        top: 50%;
+        left: 50%;
+        background: var(--cluster-color);
+        opacity: 0.2;
+        border-radius: 100%;
+      }
+
+      .custom-clustericon::before {
+        padding: 7px;
+      }
+
+      .custom-clustericon::after {
+        padding: 14px;
+      }
+
+      .custom-clustericon-1 {
+        --cluster-color: #9E9E9E;
+      }
+
+      .custom-clustericon-2 {
+        --cluster-color: #FCA100;
+      }
+
+      .custom-clustericon-3 {
+        --cluster-color: #F42A06;
+      }
+
+</style>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key={{env('GOOGLE_MAP_API_KEY')}}"></script>
+<script src="https://googlemaps.github.io/js-markerclustererplus/dist/index.min.js"></script>
+
 <script type="text/javascript">
 	$(function(){
 		$("#form-cari #id_kecamatan").selectize()[0].selectize.clear();
@@ -114,6 +164,9 @@ use App\Library\Access;
 		$('#form-cari #id_tingkat_kerusakan').selectize()[0].selectize.setValue('_all',false);
 
 		var map = null;		
+
+		
+		
 		var map_height = $("body").height() - $("#map-panel").position().top - 100;
         $("#map_canvas_detil").css('height',map_height+'px');
         
@@ -139,13 +192,75 @@ use App\Library\Access;
 
 		function generate_map(centroid, points, bound) {
              map = new google.maps.Map(document.getElementById('map_canvas_detil'), {
-                zoom: 15,
+                zoom: 8,
                 center: new google.maps.LatLng(centroid.latitude, centroid.longitude),
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
             update_custom_element();
             var infowindow = new google.maps.InfoWindow({maxWidth: 300});
     		var marker, i;
+    	
+    		//variabel cluster
+    		var marker_cluster_ringan =[] ;
+    		var marker_cluster_sedang =[] ;
+    		var marker_cluster_berat =[] ;
+
+    		var style_cluster_ringan = [
+	          {
+	            width: 30,
+	            height: 30,
+	            className: "custom-clustericon-1",
+	          },
+	          {
+	            width: 35,
+	            height: 35,
+	            className: "custom-clustericon-1",
+	          },
+	          {
+	            width: 40,
+	            height: 40,
+	            className: "custom-clustericon-1",
+	          },
+	        ];
+
+		  var style_cluster_sedang = [
+	          {
+	            width: 30,
+	            height: 30,
+	            className: "custom-clustericon-2",
+	          },
+	          {
+	            width: 35,
+	            height: 35,
+	            className: "custom-clustericon-2",
+	          },
+	          {
+	            width: 40,
+	            height: 40,
+	            className: "custom-clustericon-2",
+	          },
+	        ];
+
+		  var style_cluster_berat = [
+	          {
+	            width: 30,
+	            height: 30,
+	            className: "custom-clustericon-3",
+	          },
+	          {
+	            width: 35,
+	            height: 35,
+	            className: "custom-clustericon-3",
+	          },
+	          {
+	            width: 40,
+	            height: 40,
+	            className: "custom-clustericon-3",
+	          },
+	        ];
+		  //end variabel cluster
+
+
     		let url = "http://maps.google.com/mapfiles/ms/icons/";
             for (i = 0; i < points.length; i++) {  
 			      marker = new google.maps.Marker({
@@ -174,14 +289,67 @@ use App\Library\Access;
 			          });
 			        }
 		      })(marker, i));
+
+
+			   //marker kelompok kerusakan
+			   if(points[i].kode_rusak=="R"){
+			   	marker_cluster_ringan.push(marker);
+			   }
+
+			   if(points[i].kode_rusak=="S"){
+			   	marker_cluster_sedang.push(marker);
+			   }
+
+			    if(points[i].kode_rusak=="B"){
+			   	marker_cluster_berat.push(marker);
+			   }
+			   //end markter kelompok kerusakan
+			       			    
 		    }
 			
 			//console.log(bound);
 			var bounds = new google.maps.LatLngBounds();
 			bounds.extend(new google.maps.LatLng(bound.min_latitude, bound.min_longitude));
 			bounds.extend(new google.maps.LatLng(bound.max_latitude, bound.max_longitude));
-			map.fitBounds(bounds);
-			
+			//map.fitBounds(bounds);
+
+
+			//buat cluster marker
+			clusterRingan = new MarkerClusterer(
+					 map, 
+					 marker_cluster_ringan, 
+					  {
+		          	styles: style_cluster_ringan,
+		          	gridSize: 40,
+		          	clusterClass:  "custom-clustericon",
+		         	}
+					);
+        
+
+        clusterSedang = new MarkerClusterer(
+					 map, 
+					 marker_cluster_sedang, 
+					  {
+		          	styles: style_cluster_sedang,
+		          	gridSize: 40,
+		          	clusterClass:  "custom-clustericon",
+		         	}
+					);
+        
+
+        clusterBerat = new MarkerClusterer(
+					 map, 
+					 marker_cluster_berat, 
+					  {
+		          	styles: style_cluster_berat,
+		          	gridSize: 40,
+		          	clusterClass:  "custom-clustericon",
+		         	}
+					);
+
+        //end buat cluster marker
+
+
         }
          
         initmapdefault = function(){
